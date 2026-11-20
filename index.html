@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Document Store</title>
+<link rel="manifest" href="manifest.json"><meta name="theme-color" content="#1e6fd9"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">
+<style>
+:root{--bg:#f4f6f8;--c:#fff;--t:#1b2430;--m:#667085;--p:#1e6fd9;--d:#d33;--b:#dde3ea;--hg:#dcecff}
+@media(prefers-color-scheme:dark){:root:not([data-theme]){--bg:#10151b;--c:#1a222c;--t:#e8edf2;--m:#9aa5b1;--b:#2c3745;--hg:#17304d}}
+:root[data-theme=dark]{--bg:#10151b;--c:#1a222c;--t:#e8edf2;--m:#9aa5b1;--b:#2c3745;--hg:#17304d}
+:root[data-theme=light]{--bg:#f4f6f8;--c:#fff;--t:#1b2430;--m:#667085;--b:#dde3ea;--hg:#dcecff}
+:root{--ff:system-ui,"Noto Sans Devanagari",sans-serif}
+*{box-sizing:border-box}
+input,select,textarea,button{font-family:inherit}
+body{margin:0;font:16px/1.45 var(--ff);background:var(--bg);color:var(--t);padding-bottom:76px}
+header{position:sticky;top:0;z-index:5;background:linear-gradient(90deg,#0a49b8,#1e6fd9);color:#fff;border-radius:0 0 18px 18px;padding:12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;box-shadow:0 2px 8px #0003}
+header .logo{flex:1;font-size:20px;font-weight:700}
+header .dv{width:1px;height:28px;background:#fff7}
+header button{background:none;color:#fff;border:0;font-size:22px;padding:4px 8px}
+header select{width:auto;background:#ffffff26;color:#fff;border:1px solid #fff6;border-radius:20px;padding:8px 10px;font-size:15px}
+header select option{color:#000}
+#qrow input{background:#fff;color:#1b2430;border:0}
+#qrow{flex-basis:100%}body.home #qrow{display:none}
+.hero{background:linear-gradient(var(--hg),var(--bg));margin:-10px -10px 10px;padding:24px 16px;text-align:center}
+.tag{color:#2e9e4f;font-weight:700;letter-spacing:2px;font-size:14px;margin-top:14px}
+.hero h1{font-size:28px;line-height:1.25;margin:8px 0}
+.hs{display:flex;gap:8px;margin:16px 0 6px}.hs input{border-radius:30px;padding:13px 16px}
+.hero .b{border-radius:30px;padding:13px 22px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:10px 0}
+.chips span{background:var(--c);border:1px solid var(--b);border-radius:20px;padding:6px 12px;font-size:14px}
+main{max-width:720px;margin:0 auto;padding:10px}
+.card{background:var(--c);border:1px solid var(--b);border-radius:12px;padding:12px;margin:0 0 10px}
+.tap{cursor:pointer}.m{color:var(--m);font-size:14px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.n{font-size:28px;font-weight:700;color:var(--p)}
+label{display:block;margin:10px 0 3px;font-size:14px;color:var(--m)}
+input,select,textarea{width:100%;padding:11px;font-size:16px;border:1px solid var(--b);border-radius:8px;background:var(--c);color:var(--t)}
+button.b{background:var(--p);color:#fff;border:0;border-radius:10px;padding:12px 16px;font-size:16px;margin:6px 6px 0 0}
+button.g{background:var(--b);color:var(--t)}button.r{background:var(--d)}button.s{padding:8px 10px;font-size:14px}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.warn{background:#fff4d6;color:#6b4e00;border-radius:10px;padding:10px;margin-bottom:10px;font-size:14px}
+#ov{display:none;position:fixed;inset:0;background:#0007;z-index:7}
+#dr{position:fixed;top:0;bottom:0;right:0;width:80%;max-width:320px;background:var(--c);z-index:8;transform:translateX(105%);transition:transform .2s;overflow:auto;padding-bottom:20px}
+#dr.open{transform:none}
+#dr button{display:block;width:100%;text-align:left;background:none;border:0;color:var(--t);padding:14px 18px;font-size:16px}
+#dr .sub button{padding:11px 18px 11px 44px;font-size:15px;color:var(--m)}
+#dr h4{margin:0 0 6px;padding:16px 18px;background:var(--p);color:#fff;font-size:18px}
+.fab{position:fixed;right:16px;bottom:84px;width:56px;height:56px;border-radius:50%;background:var(--p);color:#fff;border:0;font-size:30px;box-shadow:0 2px 8px #0005;z-index:4}
+body.home .fab{display:none}
+nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:var(--c);border-top:1px solid var(--b);z-index:6}
+nav button{flex:1;padding:8px 2px 8px;border:0;border-bottom:3px solid transparent;background:none;color:var(--m);font-size:13px}
+nav button b{display:block;font-size:22px;font-weight:400}
+nav button.on{color:var(--p);border-bottom-color:var(--p)}
+.ttlpill{display:block;margin:12px auto 0;width:max-content;max-width:90%;background:linear-gradient(#0b57d0,#0a47aa);color:#fff;font-weight:700;font-size:20px;padding:8px 28px;border-radius:30px;position:relative;z-index:1}
+.tree{position:relative;padding-top:18px}
+.tree::before{content:'';position:absolute;left:50%;top:0;bottom:40px;width:3px;margin-left:-1px;background:#0b57d0}
+.dc{position:relative;z-index:1;background:var(--c);border:1px solid var(--b);border-bottom:4px solid var(--ca);border-radius:18px;margin:0 0 20px;overflow:hidden;box-shadow:0 3px 10px #0002;text-align:center}
+.dtop{background:var(--bg);background:color-mix(in srgb,var(--ca) 16%,var(--c));padding:16px 0}
+.ic{width:72px;height:72px;border-radius:50%;background:var(--ca);display:flex;align-items:center;justify-content:center;font-size:34px;margin:0 auto}
+.dc h3{margin:12px 0 2px;font-size:22px}.dc p{margin:0 12px 4px}
+button.dbtn{width:calc(100% - 32px);margin:10px 16px 16px;background:var(--ca);color:#fff;border:0;border-radius:30px;padding:13px;font-size:17px;font-weight:600}
+#m{display:none;position:fixed;inset:0;background:var(--bg);z-index:9;flex-direction:column}
+#m .bar{display:flex;justify-content:space-between;align-items:center;padding:10px;background:var(--c);gap:8px}
+#m iframe,#m img{flex:1;width:100%;border:0;object-fit:contain;min-height:0}
+</style></head><body>
+<header><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h8l4 4v5"/><path d="M6 3v18h5"/><path d="M9 9h6M9 13h3"/><path d="M17 22l4-2v-3.5l-4-1.5-4 1.5V20z" fill="#fff" stroke="none"/></svg><span class="dv"></span><span class="logo" id="ttl"></span><button onclick="menu(1)" aria-label="menu">⚙️</button><select id="lsel" onchange="setLang(this.value)"><option value="en">🌐 EN</option><option value="ne">🌐 NE</option></select><div id="qrow"><input id="q" type="search" oninput="onQ(this.value)"></div></header>
+<main id="app"></main>
+<nav id="nav"></nav><div id="ov" onclick="menu(0)"></div><div id="dr"></div><button class="fab" onclick="go('form')">+</button>
+<div id="m"></div>
+<script>
+const L={en:{home:'Home',people:'People',add:'Add person',bin:'Bin',search:'Search name, number, phone, document...',np:'Total people',nd:'Documents',cit:'Citizenship',sch:'School Certificate',oth:'Other',storage:'Storage used',recent:'Recently added',name:'Full name',dob:'Date of birth (e.g. 2060-01-15)',address:'Address',phone:'Phone',citno:'Citizenship number',notes:'Notes',ok:'I have permission to store this person\'s documents',save:'Save',cancel:'Cancel',edit:'Edit',del:'Delete',docs:'Documents',upl:'Add files (photo / PDF)',title:'Title (optional)',view:'Preview',dl:'Download',ren:'Rename',restore:'Restore',perm:'Delete forever',none:'Nothing here',s1:'Name A-Z',s2:'Newest',needname:'Please enter the full name.',needok:'Please confirm you have permission.',badtype:'not supported (use JPG, PNG, WebP or PDF)',dupwarn:'Possible duplicate:',dupcit:'same citizenship number',dupnd:'same name and date of birth',dupph:'same phone number',confdel:'Move this person to the Bin? (kept 30 days)',confperm:'Delete forever? This cannot be undone.',confdoc:'Delete this document?',fail:'Could not save. Storage may be full:',warn:'Stage 1: data is NOT encrypted yet and there is no backup yet. Do not store real documents until Stage 2.',other:'Open',open:'Open in new tab',ph:'Phone',lg:'नेपाली',menu:'Menu',srch:'Search',nid:'National ID card',birth:'Birth certificate',sett:'Settings',sec:'Security',priv:'Privacy',abt:'App info',soon:'Coming in Stage 2: Master Password, Recovery Key, auto-lock and encrypted backup.',privtxt:'All data stays on this phone (in this browser). Nothing is uploaded to any server. Only store documents with the person\'s permission.',app:'Document Store',ct:'Contacts',ctd:'Manage People & Their Documents',vct:'View Contacts',ddd:'View & Manage Your Documents',vdd:'View Documents',ky:'Key',kyd:'Your Recovery Key & Security',vky:'View Key',files:'Files',all:'All',tag:'SAFE DOCUMENTS',h1:'Find any person\'s documents in seconds',sub:'Keep citizenship, ID and certificates in one place on your phone.',c1:'Works offline',c2:'Quick search',c3:'Photo & PDF',text:'Text style & size',fnt:'Font',f1:'Phone default',f2:'Simple (sans-serif)',f3:'Book style (serif)',sz:'Text size',z1:'Small',z2:'Normal',z3:'Large',z4:'Extra large',sample:'Sample: Ram Sharma – Citizenship 123-45',theme:'Background / Theme',auto:'Automatic (follows phone)',light:'Light',dark:'Dark',abttxt:'Personal Document Manager. Stage 1 (no encryption yet). Works offline.'},
+ne:{home:'गृह',people:'व्यक्ति',add:'व्यक्ति थप्नुहोस्',bin:'बिन',search:'नाम, नम्बर, फोन, कागजात खोज्नुहोस्...',np:'जम्मा व्यक्ति',nd:'कागजात',cit:'नागरिकता',sch:'शैक्षिक प्रमाणपत्र',oth:'अन्य',storage:'प्रयोग भएको भण्डारण',recent:'हालै थपिएका',name:'पूरा नाम',dob:'जन्म मिति (जस्तै २०६०-०१-१५)',address:'ठेगाना',phone:'फोन',citno:'नागरिकता नम्बर',notes:'टिप्पणी',ok:'यो व्यक्तिको कागजात राख्ने अनुमति मसँग छ',save:'सुरक्षित गर्नुहोस्',cancel:'रद्द',edit:'सम्पादन',del:'मेट्नुहोस्',docs:'कागजातहरू',upl:'फाइल थप्नुहोस् (फोटो / PDF)',title:'शीर्षक (ऐच्छिक)',view:'हेर्नुहोस्',dl:'डाउनलोड',ren:'नाम फेर्नुहोस्',restore:'फिर्ता ल्याउनुहोस्',perm:'सधैंको लागि मेट्नुहोस्',none:'केही छैन',s1:'नाम क-ज्ञ',s2:'नयाँ पहिले',needname:'कृपया पूरा नाम लेख्नुहोस्।',needok:'कृपया अनुमति भएको पुष्टि गर्नुहोस्।',badtype:'समर्थित छैन (JPG, PNG, WebP वा PDF प्रयोग गर्नुहोस्)',dupwarn:'सम्भावित दोहोरो:',dupcit:'उही नागरिकता नम्बर',dupnd:'उही नाम र जन्म मिति',dupph:'उही फोन नम्बर',confdel:'यो व्यक्तिलाई बिनमा सार्ने? (३० दिन राखिन्छ)',confperm:'सधैंको लागि मेट्ने? फिर्ता आउँदैन।',confdoc:'यो कागजात मेट्ने?',fail:'सुरक्षित गर्न सकिएन। भण्डारण भरिएको हुन सक्छ:',warn:'चरण १: डाटा अझै encrypt गरिएको छैन र ब्याकअप छैन। चरण २ सम्म वास्तविक कागजात नराख्नुहोस्।',other:'खोल्नुहोस्',open:'नयाँ ट्याबमा खोल्नुहोस्',ph:'फोन',lg:'English',menu:'मेनु',srch:'खोज',nid:'राष्ट्रिय परिचयपत्र',birth:'जन्म दर्ता प्रमाणपत्र',sett:'सेटिङ',sec:'सुरक्षा',priv:'गोपनीयता',abt:'एप सम्बन्धी जानकारी',soon:'चरण २ मा आउँछ: Master Password, Recovery Key, अटो-लक र encrypted ब्याकअप।',privtxt:'सबै डाटा यही फोन (यही ब्राउजर) मा रहन्छ। कुनै सर्भरमा अपलोड हुँदैन। सम्बन्धित व्यक्तिको अनुमतिमा मात्र कागजात राख्नुहोस्।',app:'कागजात भण्डार',ct:'सम्पर्कहरू',ctd:'व्यक्ति र तिनका कागजात व्यवस्थापन',vct:'सम्पर्क हेर्नुहोस्',ddd:'आफ्ना कागजात हेर्नुहोस् र व्यवस्थापन गर्नुहोस्',vdd:'कागजात हेर्नुहोस्',ky:'कुञ्जी',kyd:'तपाईंको Recovery Key र सुरक्षा',vky:'कुञ्जी हेर्नुहोस्',files:'फाइल',all:'सबै',tag:'सुरक्षित कागजात',h1:'कुनै पनि व्यक्तिको कागजात छिटो भेट्नुहोस्',sub:'नागरिकता, परिचयपत्र र प्रमाणपत्र एकै ठाउँमा, आफ्नै फोनमा।',c1:'अफलाइन चल्छ',c2:'छिटो खोज',c3:'फोटो र PDF',text:'अक्षर शैली र आकार',fnt:'फन्ट',f1:'फोन अनुसार',f2:'सादा (sans-serif)',f3:'किताबी (serif)',sz:'अक्षरको आकार',z1:'सानो',z2:'सामान्य',z3:'ठुलो',z4:'धेरै ठुलो',sample:'नमुना: राम शर्मा – नागरिकता १२३-४५',theme:'ब्याकग्राउन्ड / थिम',auto:'स्वचालित (फोन अनुसार)',light:'उज्यालो',dark:'अँध्यारो',abttxt:'व्यक्तिगत कागजात व्यवस्थापक। चरण १ (अझै encrypt छैन)। अफलाइन चल्छ।'}};
+let lang='en';try{lang=localStorage.lang||'en';if(localStorage.theme)document.documentElement.dataset.theme=localStorage.theme}catch(e){}
+const t=k=>L[lang][k]||L.en[k]||k;
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid=()=>(crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2));
+const mb=n=>((n||0)/1048576).toFixed(1)+' MB';
+const dt=x=>new Date(x).toLocaleDateString();
+const TY={citizenship:'cit',nid:'nid',birth:'birth',school:'sch',other:'oth'};
+const TYPES=['citizenship','nid','birth','school','other'];
+let mDoc=0,mSet=0,dtyp=null,sec=null;
+
+const FF={f1:'',f2:'Roboto,Arial,"Noto Sans Devanagari",sans-serif',f3:'Georgia,"Noto Serif Devanagari","Noto Serif",serif'};
+const ls=k=>{try{return localStorage[k]}catch(e){}};
+function applyText(){const r=document.documentElement,f=FF[ls('fnt')];f?r.style.setProperty('--ff',f):r.style.removeProperty('--ff');r.style.zoom=ls('zm')||''}
+applyText();
+/* ---------- Database (IndexedDB) ---------- */
+let db;
+const STORES=['people','documents','files','settings','recycle','reminders','backupmeta'];
+const openDB=()=>new Promise((ok,no)=>{const r=indexedDB.open('docmgr',1);
+ r.onupgradeneeded=()=>STORES.forEach(n=>{if(!r.result.objectStoreNames.contains(n))r.result.createObjectStore(n,{keyPath:'id'})});
+ r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)});
+const P=r=>new Promise((a,b)=>{r.onsuccess=()=>a(r.result);r.onerror=()=>b(r.error)});
+const st=(s,m)=>db.transaction(s,m||'readonly').objectStore(s);
+const all=s=>P(st(s).getAll()),get=(s,i)=>P(st(s).get(i)),put=(s,v)=>P(st(s,'readwrite').put(v)),del=(s,i)=>P(st(s,'readwrite').delete(i));
+
+/* ---------- State ---------- */
+let view='home',cur=null,q='',sort='n',people=[],docs=[];
+const live=()=>people.filter(p=>!p.deletedAt);
+const dcount=id=>docs.filter(d=>d.pid==id).length;
+async function load(){people=await all('people');docs=await all('documents')}
+async function purge(id){for(const d of docs.filter(x=>x.pid==id)){await del('files',d.id);await del('documents',d.id)}await del('people',id)}
+
+function render(){
+ $('#q').placeholder=t('search');$('#lsel').value=lang;$('#ttl').textContent=t('app');document.body.classList.toggle('home',view=='home');
+ const act=view=='home'?'home':['people','prof','form'].includes(view)?'people':view=='dtype'?'files':view=='bin'?'bin':'';
+ $('#nav').innerHTML=[['home','🏠',"go('home')"],['people','👥',"go('people')"],['files','📄',"pickT('')"],['bin','🗑️',"go('bin')"]].map(([k,i,f])=>`<button class="${act==k?'on':''}" onclick="${f}"><b>${i}</b>${t(k)}</button>`).join('');
+ ({home:vHome,people:vList,form:vForm,prof:vProf,bin:vBin,dtype:vDtype,set:vSet})[view]();
+}
+function go(v){view=v;cur=null;if(v!='people'){q='';$('#q').value=''}render();window.scrollTo(0,0)}
+function onQ(v){q=v;if(view!='people'){view='people';cur=null}render()}
+function menu(o){$('#dr').classList.toggle('open',!!o);$('#ov').style.display=o?'block':'none';if(o)drawer()}
+function drawer(){
+ const B=(f,l)=>`<button onclick="${f}">${l}</button>`;
+ $('#dr').innerHTML=`<h4>${t('menu')}</h4>`
+ +B("pick('people',1)",'🔍 '+t('srch'))+B("pick('people')",'👥 '+t('np'))
+ +B('mDoc=!mDoc;drawer()','📄 '+t('docs')+(mDoc?' ▴':' ▾'))
+ +(mDoc?`<div class=sub>${TYPES.map(k=>B(`pickT('${k}')`,t(TY[k]))).join('')}</div>`:'')
+ +B('mSet=!mSet;drawer()','⚙️ '+t('sett')+(mSet?' ▴':' ▾'))
+ +(mSet?`<div class=sub>${['theme','text','sec','priv','abt'].map(k=>B(`pickS('${k}')`,t(k))).join('')}</div>`:'')
+ +B("pick('bin')",'🗑️ '+t('bin'))+B("pick('home')",'🏠 '+t('home'));
+}
+function pick(v,f){menu(0);go(v);if(f)$('#q').focus()}
+function pickT(k){menu(0);dtyp=k;view='dtype';cur=null;render();window.scrollTo(0,0)}
+function pickS(k){menu(0);sec=k;view='set';cur=null;render()}
+function setLang(v){lang=v;try{localStorage.lang=lang}catch(e){}render()}
+
+/* ---------- Views ---------- */
+function heroSearch(){q=$('#hq').value.trim();$('#q').value=q;view='people';cur=null;render();window.scrollTo(0,0)}
+function vHome(){
+ const lp=live(),ld=docs.filter(d=>lp.some(x=>x.id==d.pid));
+ const C=(cl,ic,tt,ds,n,bt,fn)=>`<div class=dc style="--ca:${cl}"><div class=dtop><div class=ic>${ic}</div></div><h3>${t(tt)}</h3><p class=m>${t(ds)}</p><div class=m>${n}</div><button class=dbtn onclick="${fn}">${t(bt)} ›</button></div>`;
+ $('#app').innerHTML=`<div class=hs><input id=hq placeholder="${esc(t('search'))}" onkeydown="if(event.key=='Enter')heroSearch()"><button class=b style="margin:0" onclick="heroSearch()">${t('srch')}</button></div>
+ <div class=ttlpill>${t('app')}</div><div class=tree>`
+ +C('#0b64e6','👥','ct','ctd',t('np')+': '+lp.length,'vct',"go('people')")
+ +C('#0f9d6a','📄','nd','ddd',t('nd')+': '+ld.length,'vdd',"pickT('')")
+ +C('#6d3fe0','🔑','ky','kyd','','vky',"pickS('sec')")
+ +`</div><div class=warn>${t('warn')}</div>`;
+}
+function vDtype(){
+ const r=docs.filter(d=>(!dtyp||d.type==dtyp)&&people.some(p=>p.id==d.pid&&!p.deletedAt));
+ const chips=['',...TYPES].map(k=>`<button class="b s ${(dtyp||'')==k?'':'g'}" onclick="pickT('${k}')">${k?t(TY[k]):t('all')}</button>`).join('');
+ $('#app').innerHTML=`<div class=row>${chips}</div><h3>${dtyp?t(TY[dtyp]):t('nd')} (${r.length})</h3>`+(r.map(d=>{const p=people.find(x=>x.id==d.pid);return `<div class="card tap" onclick="openP('${p.id}')"><b>${esc(d.title)}</b><div class=m>${esc(p.name)} · ${mb(d.size)} · ${dt(d.created)}</div></div>`}).join('')||`<div class=m>${t('none')}</div>`);
+}
+function textUI(){
+ const f=ls('fnt')||'f1',z=ls('zm')||'1';
+ const bt=(a,b,l,on)=>`<button class="b ${on?'':'g'}" onclick="${a}('${b}')">${l}</button>`;
+ return `<b>${t('fnt')}</b><br>`+['f1','f2','f3'].map(k=>bt('setFont',k,t(k),f==k)).join('')+`<br><br><b>${t('sz')}</b><br>`+[['0.9','z1'],['1','z2'],['1.15','z3'],['1.3','z4']].map(([v,k])=>bt('setZoom',v,t(k),z==v)).join('')+`<p style="font-size:18px">${t('sample')}</p>`;
+}
+function setFont(k){try{localStorage.fnt=k}catch(e){}applyText();render()}
+function setZoom(v){try{localStorage.zm=v}catch(e){}applyText();render()}
+function themeUI(){
+ let th='auto';try{th=localStorage.theme||'auto'}catch(e){}
+ return ['auto','light','dark'].map(k=>`<button class="b ${th==k?'':'g'}" onclick="setTheme('${k}')">${t(k)}</button>`).join('');
+}
+function setTheme(k){
+ try{if(k=='auto'){localStorage.removeItem('theme');delete document.documentElement.dataset.theme}else{localStorage.theme=k;document.documentElement.dataset.theme=k}}catch(e){}
+ render();
+}
+function vSet(){
+ const x={sec:t('soon'),priv:t('privtxt'),abt:t('abttxt')};
+ $('#app').innerHTML=`<div class=card><h3 style="margin-top:0">${t('sett')} › ${t(sec)}</h3>${sec=='theme'?themeUI():sec=='text'?textUI():'<p>'+x[sec]+'</p>'}</div>`;
+}
+const card=p=>`<div class="card tap" onclick="openP('${p.id}')"><b>${esc(p.name)}</b><div class=m>${esc(p.cit)} ${p.cit&&p.phone?'·':''} ${esc(p.phone)} · ${dcount(p.id)} ${t('nd')}</div></div>`;
+function match(p){
+ if(!q)return true;
+ const x=docs.filter(d=>d.pid==p.id).map(d=>d.title+' '+d.type+' '+t(TY[d.type])).join(' ');
+ return [p.name,p.cit,p.phone,p.address,x].join(' ').toLowerCase().includes(q.trim().toLowerCase());
+}
+function vList(){
+ const r=live().filter(match).sort(sort=='n'?(a,b)=>a.name.localeCompare(b.name):(a,b)=>b.created-a.created);
+ $('#app').innerHTML=`<div class=row><select style="width:auto" onchange="sort=this.value;render()"><option value=n ${sort=='n'?'selected':''}>${t('s1')}</option><option value=d ${sort=='d'?'selected':''}>${t('s2')}</option></select><span class=m>${r.length}</span></div><br>`+(r.map(card).join('')||`<div class=m>${t('none')}</div>`);
+}
+function openP(id){cur=id;view='prof';render();window.scrollTo(0,0)}
+function F(k,l,v,ta){return `<label>${t(l)}</label>`+(ta?`<textarea id=f_${k} rows=3>${esc(v)}</textarea>`:`<input id=f_${k} value="${esc(v)}">`)}
+function vForm(){
+ const p=cur?people.find(x=>x.id==cur):{};
+ $('#app').innerHTML=`<div class=card><h3>${t(cur?'edit':'add')}</h3>${F('name','name',p.name)}${F('dob','dob',p.dob)}${F('address','address',p.address,1)}${F('phone','phone',p.phone)}${F('cit','citno',p.cit)}${F('notes','notes',p.notes,1)}
+ ${cur?'':`<label style="color:var(--t)"><input type=checkbox id=ok style="width:auto"> ${t('ok')}</label>`}
+ <button class=b onclick="savePerson()">${t('save')}</button><button class="b g" onclick="${cur?`openP('${cur}')`:`go('home')`}">${t('cancel')}</button></div>`;
+}
+async function savePerson(){
+ const g=k=>$('#f_'+k).value.trim();
+ const o={name:g('name'),dob:g('dob'),address:g('address'),phone:g('phone'),cit:g('cit'),notes:g('notes')};
+ if(!o.name)return alert(t('needname'));
+ if(!cur&&!$('#ok').checked)return alert(t('needok'));
+ const why=[];
+ live().filter(x=>x.id!=cur).forEach(x=>{
+  if(o.cit&&x.cit==o.cit)why.push(x.name+': '+t('dupcit'));
+  else if(o.dob&&x.dob==o.dob&&x.name.toLowerCase()==o.name.toLowerCase())why.push(x.name+': '+t('dupnd'));
+  else if(o.phone&&x.phone==o.phone)why.push(x.name+': '+t('dupph'));
+ });
+ if(why.length&&!confirm(t('dupwarn')+'\n'+why.join('\n')))return;
+ const old=cur?people.find(x=>x.id==cur):null;
+ const p=Object.assign(old||{id:uid(),created:Date.now()},o,{updated:Date.now()});
+ try{await put('people',p)}catch(e){return alert(t('fail')+' '+e.message)}
+ await load();cur=p.id;view='prof';render();
+}
+function vProf(){
+ const p=people.find(x=>x.id==cur);if(!p)return go('people');
+ const ds=docs.filter(d=>d.pid==p.id).sort((a,b)=>a.order-b.order);
+ const R=(l,v)=>v?`<div><span class=m>${t(l)}:</span> ${esc(v)}</div>`:'';
+ $('#app').innerHTML=`<div class=card><h3 style="margin-top:0">${esc(p.name)}</h3>${R('dob',p.dob)}${R('address',p.address)}${R('phone',p.phone)}${R('citno',p.cit)}${R('notes',p.notes)}
+ <div class=m>${dt(p.created)}</div>
+ <button class="b s" onclick="view='form';render()">${t('edit')}</button><button class="b s r" onclick="delPerson()">${t('del')}</button></div>
+ <div class=card><b>${t('docs')}</b>
+ <select id=dty>${TYPES.map(k=>`<option value=${k}>${t(TY[k])}</option>`).join('')}</select>
+ <label>${t('title')}</label><input id=dti>
+ <label>${t('upl')}</label><input type=file multiple accept="image/jpeg,image/png,image/webp,application/pdf,image/*" onchange="addDocs(this,'${p.id}')"></div>
+ ${ds.map(d=>`<div class=card><b>${esc(d.title)}</b><div class=m>${t(TY[d.type])} · ${mb(d.size)} · ${dt(d.created)}</div>
+ <button class="b s" onclick="prev('${d.id}')">${t('view')}</button><button class="b s g" onclick="dl('${d.id}')">${t('dl')}</button><button class="b s g" onclick="ren('${d.id}')">${t('ren')}</button><button class="b s r" onclick="delDoc('${d.id}')">${t('del')}</button></div>`).join('')}`;
+}
+async function delPerson(){
+ if(!confirm(t('confdel')))return;
+ const p=people.find(x=>x.id==cur);p.deletedAt=Date.now();await put('people',p);await load();go('people');
+}
+function vBin(){
+ const r=people.filter(p=>p.deletedAt);
+ $('#app').innerHTML=r.map(p=>`<div class=card><b>${esc(p.name)}</b><div class=m>${dt(p.deletedAt)} · ${dcount(p.id)} ${t('nd')}</div>
+ <button class="b s" onclick="restore('${p.id}')">${t('restore')}</button><button class="b s r" onclick="forever('${p.id}')">${t('perm')}</button></div>`).join('')||`<div class=m>${t('none')}</div>`;
+}
+async function restore(id){const p=people.find(x=>x.id==id);delete p.deletedAt;await put('people',p);await load();render()}
+async function forever(id){if(!confirm(t('confperm')))return;await purge(id);await load();render()}
+
+/* ---------- Documents ---------- */
+async function addDocs(inp,pid){
+ const ty=$('#dty').value,ti=$('#dti').value.trim();
+ for(const f of inp.files){
+  if(!/^(image\/(jpeg|png|webp)|application\/pdf)$/.test(f.type)){alert(f.name+': '+t('badtype'));continue}
+  const id=uid();
+  try{
+   await put('files',{id,blob:f});
+   await put('documents',{id,pid,type:ty,title:ti||f.name.replace(/\.[^.]+$/,''),name:f.name,mime:f.type,size:f.size,created:Date.now(),order:Date.now()});
+  }catch(e){await del('files',id).catch(()=>0);alert(t('fail')+' '+e.message)}
+ }
+ await load();render();
+}
+async function prev(id){
+ const d=docs.find(x=>x.id==id),f=await get('files',id);if(!f)return;
+ const u=URL.createObjectURL(f.blob),m=$('#m');m.dataset.u=u;
+ m.innerHTML=`<div class=bar><b>${esc(d.title)}</b><span><a href="${u}" target=_blank>${t('open')}</a> <button class="b s g" onclick="closeM()">✕</button></span></div>`+(d.mime=='application/pdf'?`<iframe src="${u}"></iframe>`:`<img src="${u}">`);
+ m.style.display='flex';
+}
+function closeM(){const m=$('#m');URL.revokeObjectURL(m.dataset.u);m.style.display='none';m.innerHTML=''}
+async function dl(id){
+ const d=docs.find(x=>x.id==id),f=await get('files',id),u=URL.createObjectURL(f.blob),a=document.createElement('a');
+ a.href=u;a.download=d.name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),5000);
+}
+async function ren(id){
+ const d=docs.find(x=>x.id==id),n=prompt(t('title'),d.title);if(!n||!n.trim())return;
+ d.title=n.trim();await put('documents',d);await load();render();
+}
+async function delDoc(id){if(!confirm(t('confdoc')))return;await del('files',id);await del('documents',id);await load();render()}
+
+/* ---------- Start ---------- */
+(async()=>{
+ try{
+  db=await openDB();await load();
+  const old=Date.now()-30*864e5;
+  for(const p of people.filter(p=>p.deletedAt&&p.deletedAt<old))await purge(p.id);
+  await load();
+  if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();
+  render();
+ }catch(e){document.body.innerHTML='<p style="padding:20px">Database error: '+esc(e.message)+'<br>Private/Incognito mode may block storage.</p>'}
+})();
+if('serviceWorker' in navigator&&location.protocol.indexOf('http')==0)navigator.serviceWorker.register('sw.js').catch(()=>{});
+</script></body></html>
